@@ -10,5 +10,22 @@ func Seeder(db *gorm.DB) error {
 		return err
 	}
 
+	if err := seeds.ListViolationSeeder(db); err != nil {
+		return err
+	}
+
+	if err := seeds.ListViolationActionSeeder(db); err != nil {
+		return err
+	}
+	
+	if err := seeds.ListViolationMediaSeeder(db); err != nil {
+		return err
+	}
+
+	if err := seeds.ListViolationNoteSeeder(db); err != nil {
+		return err
+	}
+
+
 	return nil
 }
