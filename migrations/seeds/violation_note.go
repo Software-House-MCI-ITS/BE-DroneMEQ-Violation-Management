@@ -41,7 +41,7 @@ func ListViolationNoteSeeder(db *gorm.DB) error {
             return err
         }
 
-        isData := db.Find(&violationNote, "PKID = ?", data.PKID).RowsAffected
+        isData := db.Find(&violationNote, "pk_id = ?", data.PKID).RowsAffected
         if isData == 0 {
             if err := db.Create(&data).Error; err != nil {
                 return err

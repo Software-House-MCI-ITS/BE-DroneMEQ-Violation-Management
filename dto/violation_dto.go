@@ -3,90 +3,90 @@ package dto
 import "time"
 
 type Violation struct {
-	PKID           int64     `gorm:"primary_key;auto_increment"`
-	ReportedByPKID int64     `gorm:"not null"`
-	Latitude       float64   `gorm:"not null"`
-	Longitude      float64   `gorm:"not null"`
-	ReportedAt     time.Time `gorm:"not null"`
-	ViolationType  string    `gorm:"type:enum('ILLEGAL_FISHING', 'POLLUTION', 'HABITAT_DESTRUCTION', 'ASSET_MISSING', 'OTHER')"`
-	Status         string    `gorm:"type:enum('REPORTED', 'UNDER_REVIEW', 'RESOLVED', 'DISMISSED')"`
-	Severity       string    `gorm:"type:enum('LOW', 'MEDIUM', 'HIGH')"`
-	Description    string    `gorm:"type:text"`
+    PKID           int64     `gorm:"primary_key;auto_increment" json:"pkid"`
+    ReportedByPKID int64     `gorm:"not null" json:"reported_by_pkid"`
+    Latitude       float64   `gorm:"not null" json:"latitude"`
+    Longitude      float64   `gorm:"not null" json:"longitude"`
+    ReportedAt     time.Time `gorm:"not null" json:"reported_at"`
+    ViolationType  string    `gorm:"type:varchar(255)" json:"violation_type"`
+    Status         string    `gorm:"type:varchar(255)" json:"status"`
+    Severity       string    `gorm:"type:varchar(255)" json:"severity"`
+    Description    string    `gorm:"type:text" json:"description"`
 
-	// Audit Columns
-	OfficePKID  int64     `gorm:"not null"`
-	CreatedBy   string    `gorm:"size:255;not null"`
-	CreatedDate time.Time `gorm:"not null"`
-	CreatedHost *string   `gorm:"size:255"`
-	UpdatedBy   *string   `gorm:"size:255"`
-	UpdatedDate *time.Time
-	UpdatedHost *string `gorm:"size:255"`
-	IsDeleted   bool    `gorm:"not null;default:false"`
-	DeletedBy   *string `gorm:"size:255"`
-	DeletedDate *time.Time
-	DeletedHost *string `gorm:"size:255"`
+    // Audit Columns
+    OfficePKID  int64     `gorm:"not null" json:"office_pkid"`
+    CreatedBy   string    `gorm:"size:255;not null" json:"created_by"`
+    CreatedDate time.Time `gorm:"not null" json:"created_date"`
+    CreatedHost *string   `gorm:"size:255" json:"created_host"`
+    UpdatedBy   *string   `gorm:"size:255" json:"updated_by,omitempty"`
+    UpdatedDate *time.Time `json:"updated_date,omitempty"`
+    UpdatedHost *string   `gorm:"size:255" json:"updated_host,omitempty"`
+    IsDeleted   bool      `gorm:"not null;default:false" json:"is_deleted"`
+    DeletedBy   *string   `gorm:"size:255" json:"deleted_by,omitempty"`
+    DeletedDate *time.Time `json:"deleted_date,omitempty"`
+    DeletedHost *string   `gorm:"size:255" json:"deleted_host,omitempty"`
 }
 
 type ViolationAction struct {
-	PKID          int64     `gorm:"primary_key;auto_increment"`
-	ViolationPKID int64     `gorm:"not null"`
-	ActionTaken   string    `gorm:"type:varchar(255)"`
-	TakenByPKID   int64     `gorm:"not null"`
-	ActionTakenAt time.Time `gorm:"not null"`
-	Outcome       string    `gorm:"type:enum('SUCCESSFUL', 'FAILED', 'PARTIAL')"`
+    PKID          int64     `gorm:"primary_key;auto_increment" json:"pkid"`
+    ViolationPKID int64     `gorm:"not null" json:"violation_pkid"`
+    ActionTaken   string    `gorm:"type:varchar(255)" json:"action_taken"`
+    TakenByPKID   int64     `gorm:"not null" json:"taken_by_pkid"`
+    ActionTakenAt time.Time `gorm:"not null" json:"action_taken_at"`
+    Outcome       string    `gorm:"type:varchar(255)" json:"outcome"`
 
-	// Audit Columns
-	OfficePKID  int64     `gorm:"not null"`
-	CreatedBy   string    `gorm:"size:255;not null"`
-	CreatedDate time.Time `gorm:"not null"`
-	CreatedHost *string   `gorm:"size:255"`
-	UpdatedBy   *string   `gorm:"size:255"`
-	UpdatedDate *time.Time
-	UpdatedHost *string `gorm:"size:255"`
-	IsDeleted   bool    `gorm:"not null;default:false"`
-	DeletedBy   *string `gorm:"size:255"`
-	DeletedDate *time.Time
-	DeletedHost *string `gorm:"size:255"`
+    // Audit Columns
+    OfficePKID  int64     `gorm:"not null" json:"office_pkid"`
+    CreatedBy   string    `gorm:"size:255;not null" json:"created_by"`
+    CreatedDate time.Time `gorm:"not null" json:"created_date"`
+    CreatedHost *string   `gorm:"size:255" json:"created_host"`
+    UpdatedBy   *string   `gorm:"size:255" json:"updated_by,omitempty"`
+    UpdatedDate *time.Time `json:"updated_date,omitempty"`
+    UpdatedHost *string   `gorm:"size:255" json:"updated_host,omitempty"`
+    IsDeleted   bool      `gorm:"not null;default:false" json:"is_deleted"`
+    DeletedBy   *string   `gorm:"size:255" json:"deleted_by,omitempty"`
+    DeletedDate *time.Time `json:"deleted_date,omitempty"`
+    DeletedHost *string   `gorm:"size:255" json:"deleted_host,omitempty"`
 }
 
 type ViolationNote struct {
-	PKID          int64     `gorm:"primary_key;auto_increment"`
-	ViolationPKID int64     `gorm:"not null"`
-	Note          string    `gorm:"type:text"`
-	NoteType      string    `gorm:"type:enum('OBSERVATION', 'FOLLOWUP', 'RESOLUTION', 'OTHER')"`
+    PKID          int64     `gorm:"primary_key;auto_increment" json:"pkid"`
+    ViolationPKID int64     `gorm:"not null" json:"violation_pkid"`
+    Note          string    `gorm:"type:text" json:"note"`
+    NoteType      string    `gorm:"type:varchar(255)" json:"note_type"`
 
-	// Audit Columns
-	OfficePKID  int64     `gorm:"not null"`
-	CreatedBy   string    `gorm:"size:255;not null"`
-	CreatedDate time.Time `gorm:"not null"`
-	CreatedHost *string   `gorm:"size:255"`
-	UpdatedBy   *string   `gorm:"size:255"`
-	UpdatedDate *time.Time
-	UpdatedHost *string `gorm:"size:255"`
-	IsDeleted   bool    `gorm:"not null;default:false"`
-	DeletedBy   *string `gorm:"size:255"`
-	DeletedDate *time.Time
-	DeletedHost *string `gorm:"size:255"`
+    // Audit Columns
+    OfficePKID  int64     `gorm:"not null" json:"office_pkid"`
+    CreatedBy   string    `gorm:"size:255;not null" json:"created_by"`
+    CreatedDate time.Time `gorm:"not null" json:"created_date"`
+    CreatedHost *string   `gorm:"size:255" json:"created_host"`
+    UpdatedBy   *string   `gorm:"size:255" json:"updated_by,omitempty"`
+    UpdatedDate *time.Time `json:"updated_date,omitempty"`
+    UpdatedHost *string   `gorm:"size:255" json:"updated_host,omitempty"`
+    IsDeleted   bool      `gorm:"not null;default:false" json:"is_deleted"`
+    DeletedBy   *string   `gorm:"size:255" json:"deleted_by,omitempty"`
+    DeletedDate *time.Time `json:"deleted_date,omitempty"`
+    DeletedHost *string   `gorm:"size:255" json:"deleted_host,omitempty"`
 }
 
 type ViolationMedia struct {
-	PKID          int64     `gorm:"primary_key;auto_increment"`
-	ViolationPKID int64     `gorm:"not null"`
-	MediaURL      string    `gorm:"type:varchar(255)"`
-	MediaType     string    `gorm:"type:enum('IMAGE', 'VIDEO', 'DOCUMENT')"`
-	UploadedByPKID int64    `gorm:"not null"`
-	UploadedAt    time.Time `gorm:"not null"`
+    PKID           int64     `gorm:"primary_key;auto_increment" json:"pkid"`
+    ViolationPKID  int64     `gorm:"not null" json:"violation_pkid"`
+    MediaURL       string    `gorm:"type:varchar(255)" json:"media_url"`
+    MediaType      string    `gorm:"type:varchar(255)" json:"media_type"`
+    UploadedByPKID int64     `gorm:"not null" json:"uploaded_by_pkid"`
+    UploadedAt     time.Time `gorm:"not null" json:"uploaded_at"`
 
-	// Audit Columns
-	OfficePKID  int64     `gorm:"not null"`
-	CreatedBy   string    `gorm:"size:255;not null"`
-	CreatedDate time.Time `gorm:"not null"`
-	CreatedHost *string   `gorm:"size:255"`
-	UpdatedBy   *string   `gorm:"size:255"`
-	UpdatedDate *time.Time
-	UpdatedHost *string `gorm:"size:255"`
-	IsDeleted   bool    `gorm:"not null;default:false"`
-	DeletedBy   *string `gorm:"size:255"`
-	DeletedDate *time.Time
-	DeletedHost *string `gorm:"size:255"`
+    // Audit Columns
+    OfficePKID  int64     `gorm:"not null" json:"office_pkid"`
+    CreatedBy   string    `gorm:"size:255;not null" json:"created_by"`
+    CreatedDate time.Time `gorm:"not null" json:"created_date"`
+    CreatedHost *string   `gorm:"size:255" json:"created_host"`
+    UpdatedBy   *string   `gorm:"size:255" json:"updated_by,omitempty"`
+    UpdatedDate *time.Time `json:"updated_date,omitempty"`
+    UpdatedHost *string   `gorm:"size:255" json:"updated_host,omitempty"`
+    IsDeleted   bool      `gorm:"not null;default:false" json:"is_deleted"`
+    DeletedBy   *string   `gorm:"size:255" json:"deleted_by,omitempty"`
+    DeletedDate *time.Time `json:"deleted_date,omitempty"`
+    DeletedHost *string   `gorm:"size:255" json:"deleted_host,omitempty"`
 }
