@@ -17,6 +17,7 @@ type (
 		GetAllViolationWithPagination(ctx context.Context, tx *gorm.DB, req dto.PaginationRequest) (dto.GetAllViolationRepositoryResponse, error)
 		GetViolationById(ctx context.Context, tx *gorm.DB, pkid int64) (entity.Violation, error)
 		GetViolationByStatus(ctx context.Context, tx *gorm.DB, status string) (entity.Violation, error)
+		UpdateViolation(ctx context.Context, tx *gorm.DB, pkid int64, updatedData entity.Violation) (entity.Violation, error)
 	}
 
 	violationRepository struct {
@@ -107,4 +108,21 @@ func (r *violationRepository) GetViolationByStatus(ctx context.Context, tx *gorm
 	}
 
 	return violation, nil
+}
+
+func (r *violationRepository) UpdateViolation(ctx context.Context, tx *gorm.DB, pkid int64, updatedData entity.Violation) (entity.Violation, error) {
+    // Use r.db if no transaction is provided
+    if tx == nil {
+        tx = r.db
+    }
+
+    // Update violation where pk_id matches
+    if err := tx.WithContext(ctx).
+        Model(&entity.Violation{}).
+        Where("pk_id = ?", pkid).
+        Updates(updatedData).Error; err != nil {
+        return entity.Violation{}, err
+    }
+
+    return updatedData, nil
 }

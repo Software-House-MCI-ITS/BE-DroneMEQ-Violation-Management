@@ -9,9 +9,10 @@ func Violation(route *gin.Engine, violationController controller.ViolationContro
 	routes := route.Group("/api/violations")
 	{
 		// User
-		routes.POST("", violationController.Create)
+		routes.POST("", violationController.CreateVs)
 		routes.GET("", violationController.GetAllViolation)
 		routes.GET("/:pk_id", violationController.ViolationById)
 		routes.GET("/status/:status", violationController.ViolationByStatus)
+		routes.PUT("/:pk_id", violationController.UpdateVs)
 	}
 }

@@ -12,10 +12,11 @@ import (
 
 type (
 	ViolationController interface {
-		Create(ctx *gin.Context)
+		CreateVs(ctx *gin.Context)
 		GetAllViolation(ctx *gin.Context)
 		ViolationById(ctx *gin.Context)
 		ViolationByStatus(ctx *gin.Context)
+		UpdateVs(ctx *gin.Context)
 	}
 
 	violationController struct {
@@ -29,7 +30,7 @@ func NewViolationController(vs service.ViolationService) ViolationController {
 	}
 }
 
-func (c *violationController) Create(ctx *gin.Context) {
+func (c *violationController) CreateVs(ctx *gin.Context) {
 	var violation dto.ViolationCreateRequest
 	// Check if the request body is valid
 	if err := ctx.ShouldBind(&violation); err != nil {
@@ -72,44 +73,78 @@ func (c *violationController) GetAllViolation(ctx *gin.Context) {
 }
 
 func (c *violationController) ViolationById(ctx *gin.Context) {
-    // Get pk_id from URL parameter
-    violationIdStr := ctx.Param("pk_id")
-    
-    // Convert pk_id to int64
-    violationId, err := strconv.ParseInt(violationIdStr, 10, 64)
-    if err != nil {
-        // Handle the case where pk_id is not a valid integer
-        res := utils.BuildResponseFailed("Invalid pk_id", err.Error(), nil)
-        ctx.JSON(http.StatusBadRequest, res)
-        return
-    }
+	// Get pk_id from URL parameter
+	violationIdStr := ctx.Param("pk_id")
 
-    // Fetch the violation using the violationService
-    result, err := c.violationService.GetViolationById(ctx.Request.Context(), violationId)
-    if err != nil {
-        res := utils.BuildResponseFailed(dto.MESSAGE_FAILED_GET_VIOLATION_BY_ID, err.Error(), nil)
-        ctx.JSON(http.StatusBadRequest, res)
-        return
-    }
+	// Convert pk_id to int64
+	violationId, err := strconv.ParseInt(violationIdStr, 10, 64)
+	if err != nil {
+		// Handle the case where pk_id is not a valid integer
+		res := utils.BuildResponseFailed("Invalid pk_id", err.Error(), nil)
+		ctx.JSON(http.StatusBadRequest, res)
+		return
+	}
 
-    // Return the result
-    res := utils.BuildResponseSuccess(dto.MESSAGE_SUCCESS_GET_VIOLATION_BY_ID, result)
-    ctx.JSON(http.StatusOK, res)
+	// Fetch the violation using the violationService
+	result, err := c.violationService.GetViolationById(ctx.Request.Context(), violationId)
+	if err != nil {
+		res := utils.BuildResponseFailed(dto.MESSAGE_FAILED_GET_VIOLATION_BY_ID, err.Error(), nil)
+		ctx.JSON(http.StatusBadRequest, res)
+		return
+	}
+
+	// Return the result
+	res := utils.BuildResponseSuccess(dto.MESSAGE_SUCCESS_GET_VIOLATION_BY_ID, result)
+	ctx.JSON(http.StatusOK, res)
 }
 
 func (c *violationController) ViolationByStatus(ctx *gin.Context) {
-    // Get status from URL parameter
-    status := ctx.Param("status")
+	// Get status from URL parameter
+	status := ctx.Param("status")
 
-    // Call the violationService to get violations by status
-    result, err := c.violationService.GetViolationByStatus(ctx.Request.Context(), status)
-    if err != nil {
-        res := utils.BuildResponseFailed(dto.MESSAGE_FAILED_GET_VIOLATION_BY_STATUS, err.Error(), nil)
-        ctx.JSON(http.StatusBadRequest, res)
-        return
-    }
+	// Call the violationService to get violations by status
+	result, err := c.violationService.GetViolationByStatus(ctx.Request.Context(), status)
+	if err != nil {
+		res := utils.BuildResponseFailed(dto.MESSAGE_FAILED_GET_VIOLATION_BY_STATUS, err.Error(), nil)
+		ctx.JSON(http.StatusBadRequest, res)
+		return
+	}
 
-    // Return the result
-    res := utils.BuildResponseSuccess(dto.MESSAGE_SUCCESS_GET_VIOLATION_BY_STATUS, result)
-    ctx.JSON(http.StatusOK, res)
+	// Return the result
+	res := utils.BuildResponseSuccess(dto.MESSAGE_SUCCESS_GET_VIOLATION_BY_STATUS, result)
+	ctx.JSON(http.StatusOK, res)
+}
+
+func (c *violationController) UpdateVs(ctx *gin.Context) {
+	// Get pk_id from URL parameter
+	violationIdStr := ctx.Param("pk_id")
+
+	// Convert pk_id to int64	
+	violationId, err := strconv.ParseInt(violationIdStr, 10, 64)
+	if err != nil {
+		// Handle the case where pk_id is not a valid integer
+		res := utils.BuildResponseFailed("Invalid pk_id", err.Error(), nil)
+		ctx.JSON(http.StatusBadRequest, res)
+		return
+	}
+
+	// Get the request body
+	var req dto.ViolationUpdateRequest
+	if err := ctx.ShouldBind(&req); err != nil {
+		res := utils.BuildResponseFailed(dto.MESSAGE_FAILED_GET_DATA_FROM_BODY, err.Error(), nil)
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, res)
+		return
+	}
+
+	// Call the violationService to update the violation
+	result, err := c.violationService.UpdateViolation(ctx.Request.Context(), req, violationId)
+	if err != nil {
+		res := utils.BuildResponseFailed(dto.MESSAGE_FAILED_UPDATE_VIOLATION, err.Error(), nil)
+		ctx.JSON(http.StatusBadRequest, res)
+		return
+	}
+
+	// Return the result
+	res := utils.BuildResponseSuccess(dto.MESSAGE_SUCCESS_UPDATE_VIOLATION, result)
+	ctx.JSON(http.StatusOK, res)
 }

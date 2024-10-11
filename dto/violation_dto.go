@@ -7,16 +7,18 @@ import (
 )
 
 const (
-    // Message Failed
-    MESSAGE_FAILED_CREATE_VIOLATION = "Failed to create violation"
-    MESSAGE_FAILED_GET_ALL_VIOLATION = "Failed to get all violation"
-	MESSAGE_FAILED_GET_VIOLATION_BY_ID = "Failed to get violation by id"
+	// Message Failed
+	MESSAGE_FAILED_CREATE_VIOLATION        = "Failed to create violation"
+	MESSAGE_FAILED_GET_ALL_VIOLATION       = "Failed to get all violation"
+	MESSAGE_FAILED_GET_VIOLATION_BY_ID     = "Failed to get violation by id"
 	MESSAGE_FAILED_GET_VIOLATION_BY_STATUS = "Failed to get violation by status"
-    // Message Success
-    MESSAGE_SUCCESS_GET_ALL_VIOLATION = "Success to get all violation"
-    MESSAGE_SUCCESS_CREATE_VIOLATION = "Success to create violation"
-	MESSAGE_SUCCESS_GET_VIOLATION_BY_ID = "Success to get violation by id"
+	MESSAGE_FAILED_UPDATE_VIOLATION        = "Failed to update violation"
+	// Message Success
+	MESSAGE_SUCCESS_GET_ALL_VIOLATION       = "Success to get all violation"
+	MESSAGE_SUCCESS_CREATE_VIOLATION        = "Success to create violation"
+	MESSAGE_SUCCESS_GET_VIOLATION_BY_ID     = "Success to get violation by id"
 	MESSAGE_SUCCESS_GET_VIOLATION_BY_STATUS = "Success to get violation by status"
+	MESSAGE_SUCCESS_UPDATE_VIOLATION        = "Success to update violation"
 )
 
 type GetAllViolationRepositoryResponse struct {
@@ -35,6 +37,21 @@ type ViolationCreateRequest struct {
 
 type ViolationResponse struct {
 	PKID           int64   `json:"pkid"`
+	ReportedByPKID int64   `json:"reported_by_pkid"`
+	Latitude       float64 `json:"latitude"`
+	Longitude      float64 `json:"longitude"`
+	ViolationType  string  `json:"violation_type"`
+	Severity       string  `json:"severity"`
+	Description    string  `json:"description"`
+}
+
+type ViolationUpdateRequest struct {
+	Status string `json:"status" form:"status"`
+}
+
+type ViolationUpdateResponse struct {
+	PKID           int64   `json:"pkid"`
+	Status         string  `json:"status"`
 	ReportedByPKID int64   `json:"reported_by_pkid"`
 	Latitude       float64 `json:"latitude"`
 	Longitude      float64 `json:"longitude"`

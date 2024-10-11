@@ -26,6 +26,7 @@ type (
 		GetAllViolationWithPagination(ctx context.Context, req dto.PaginationRequest) (dto.ViolationPaginationResponse, error)
 		GetViolationById(ctx context.Context, pkid int64) (dto.ViolationResponse, error)
 		GetViolationByStatus(ctx context.Context, status string) (dto.ViolationResponse, error)
+		UpdateViolation(ctx context.Context, req dto.ViolationUpdateRequest, pkid int64) (dto.ViolationUpdateResponse, error)
 	}
 
 	violationService struct {
@@ -130,5 +131,27 @@ func (s *violationService) GetViolationByStatus(ctx context.Context, status stri
 		ViolationType:  violation.ViolationType,
 		Severity:       violation.Severity,
 		Description:    violation.Description,
+	}, nil
+}
+
+func (s *violationService) UpdateViolation(ctx context.Context, req dto.ViolationUpdateRequest, pkid int64) (dto.ViolationUpdateResponse, error) {
+	violation, err := s.violationRepo.UpdateViolation(ctx, nil, pkid, entity.Violation{})
+	if err != nil {
+		return dto.ViolationUpdateResponse{}, err
+	}
+
+	data := entity.Violation{
+		PKID:   violation.PKID,
+		Status: req.Status,
+	}
+
+	violationUpdate, err := s.violationRepo.UpdateViolation(ctx, nil, pkid, data)
+	if err != nil {
+		return dto.ViolationUpdateResponse{}, err
+	}
+
+	return dto.ViolationUpdateResponse{
+		PKID:   violationUpdate.PKID,
+		Status: violationUpdate.Status,
 	}, nil
 }
