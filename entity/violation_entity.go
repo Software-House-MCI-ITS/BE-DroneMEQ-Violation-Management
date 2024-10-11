@@ -61,9 +61,9 @@ type Violation struct {
     Latitude       float64       `gorm:"not null" json:"latitude"`         // Fixed missing closing quote for json tag
     Longitude      float64       `gorm:"not null" json:"longitude"`        // Fixed missing closing quote for json tag
     ReportedAt     time.Time     `gorm:"not null" json:"reported_at"`      // Field is now exported (starts with uppercase)
-    ViolationType  violationType `gorm:"not null" json:"violation_type"`
+    ViolationType  string        `gorm:"not null" json:"violation_type"`
     Status         status        `gorm:"not null" json:"status"`
-    Severity       severity      `gorm:"not null" json:"severity"`
+    Severity       string        `gorm:"not null" json:"severity"`
     Description    string        `gorm:"type:text" json:"description"`
     
     // Audit Columns

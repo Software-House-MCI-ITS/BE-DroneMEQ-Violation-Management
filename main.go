@@ -30,12 +30,14 @@ func main() {
 		// Implementation Dependency Injection
 		// Repository
 		userRepository repository.UserRepository = repository.NewUserRepository(db)
-
+		violationRepository repository.ViolationRepository = repository.NewViolationRepository(db)
 		// Service
 		userService service.UserService = service.NewUserService(userRepository, jwtService)
+		violationService service.ViolationService = service.NewViolationService(violationRepository)
 
 		// Controller
 		userController controller.UserController = controller.NewUserController(userService)
+		violationController controller.ViolationController = controller.NewViolationController(violationService)
 	)
 
 	server := gin.Default()
@@ -43,6 +45,7 @@ func main() {
 
 	// routes
 	routes.User(server, userController, jwtService)
+	routes.Violation(server, violationController)
 
 	server.Static("/assets", "./assets")
 	port := os.Getenv("PORT")
