@@ -3,7 +3,6 @@ package repository
 import (
 	"context"
 	"math"
-	
 
 	"github.com/mci-its/backend-service/dto"
 	"github.com/mci-its/backend-service/entity"
@@ -111,18 +110,18 @@ func (r *violationRepository) GetViolationByStatus(ctx context.Context, tx *gorm
 }
 
 func (r *violationRepository) UpdateViolation(ctx context.Context, tx *gorm.DB, pkid int64, updatedData entity.Violation) (entity.Violation, error) {
-    // Use r.db if no transaction is provided
-    if tx == nil {
-        tx = r.db
-    }
+	// Use r.db if no transaction is provided
+	if tx == nil {
+		tx = r.db
+	}
 
-    // Update violation where pk_id matches
-    if err := tx.WithContext(ctx).
-        Model(&entity.Violation{}).
-        Where("pk_id = ?", pkid).
-        Updates(updatedData).Error; err != nil {
-        return entity.Violation{}, err
-    }
+	// Update violation where pk_id matches
+	if err := tx.WithContext(ctx).
+		Model(&entity.Violation{}).
+		Where("pk_id = ?", pkid).
+		Updates(updatedData).Error; err != nil {
+		return entity.Violation{}, err
+	}
 
-    return updatedData, nil
+	return updatedData, nil
 }

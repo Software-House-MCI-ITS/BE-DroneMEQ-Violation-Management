@@ -29,15 +29,20 @@ func main() {
 
 		// Implementation Dependency Injection
 		// Repository
-		userRepository repository.UserRepository = repository.NewUserRepository(db)
-		violationRepository repository.ViolationRepository = repository.NewViolationRepository(db)
+		userRepository            repository.UserRepository            = repository.NewUserRepository(db)
+		violationRepository       repository.ViolationRepository       = repository.NewViolationRepository(db)
+		violationActionRepository repository.ViolationActionRepository = repository.NewViolationActionRepository(db)
+		ViolationNoteRepository   repository.ViolationNoteRepository   = repository.NewViolationNoteRepository(db)		
 		// Service
-		userService service.UserService = service.NewUserService(userRepository, jwtService)
-		violationService service.ViolationService = service.NewViolationService(violationRepository)
-
+		userService            service.UserService            = service.NewUserService(userRepository, jwtService)
+		violationService       service.ViolationService       = service.NewViolationService(violationRepository)
+		violationActionService service.ViolationActionService = service.NewViolationActionService(violationActionRepository)
+		violationNoteService   service.ViolationNoteService   = service.NewViolationNoteService(ViolationNoteRepository)
 		// Controller
-		userController controller.UserController = controller.NewUserController(userService)
-		violationController controller.ViolationController = controller.NewViolationController(violationService)
+		userController            controller.UserController            = controller.NewUserController(userService)
+		violationController       controller.ViolationController       = controller.NewViolationController(violationService)
+		violationActionController controller.ViolationActionController = controller.NewViolationActionController(violationActionService)
+		violationNoteController   controller.ViolationNoteController   = controller.NewViolationNoteController(violationNoteService)
 	)
 
 	server := gin.Default()
@@ -46,6 +51,8 @@ func main() {
 	// routes
 	routes.User(server, userController, jwtService)
 	routes.Violation(server, violationController)
+	routes.ViolationAction(server, violationActionController)
+	routes.ViolationNote(server, violationNoteController)
 
 	server.Static("/assets", "./assets")
 	port := os.Getenv("PORT")

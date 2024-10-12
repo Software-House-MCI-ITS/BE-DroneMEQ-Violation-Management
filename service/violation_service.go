@@ -139,7 +139,7 @@ func (s *violationService) UpdateViolation(ctx context.Context, req dto.Violatio
 	if err != nil {
 		return dto.ViolationUpdateResponse{}, err
 	}
-
+	// Update the violation
 	data := entity.Violation{
 		PKID:   violation.PKID,
 		Status: req.Status,

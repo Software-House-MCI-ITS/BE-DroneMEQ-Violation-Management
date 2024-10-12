@@ -8,6 +8,8 @@ import (
 
 const (
 	// Message Failed
+	MESSAGE_FAILED_CREATE_VIOLATION_NOTE   = "Failed to create violation note"
+	MESSAGE_FAILED_CREATE_VIOLATION_ACTION = "Failed to create violation action"
 	MESSAGE_FAILED_CREATE_VIOLATION        = "Failed to create violation"
 	MESSAGE_FAILED_GET_ALL_VIOLATION       = "Failed to get all violation"
 	MESSAGE_FAILED_GET_VIOLATION_BY_ID     = "Failed to get violation by id"
@@ -19,6 +21,8 @@ const (
 	MESSAGE_SUCCESS_GET_VIOLATION_BY_ID     = "Success to get violation by id"
 	MESSAGE_SUCCESS_GET_VIOLATION_BY_STATUS = "Success to get violation by status"
 	MESSAGE_SUCCESS_UPDATE_VIOLATION        = "Success to update violation"
+	MESSAGE_SUCCESS_CREATE_VIOLATION_ACTION = "Failed to create violation action"
+	MESSAGE_SUCCESS_CREATE_VIOLATION_NOTE   = "Failed to create violation note"
 )
 
 type GetAllViolationRepositoryResponse struct {
@@ -43,6 +47,31 @@ type ViolationResponse struct {
 	ViolationType  string  `json:"violation_type"`
 	Severity       string  `json:"severity"`
 	Description    string  `json:"description"`
+}
+
+type ViolationActionCreateRequest struct {
+	ActionTaken string `gorm:"type:varchar(255)" json:"action_taken"`
+	TakenByPKID int64  `gorm:"not null" json:"taken_by_pkid"`
+	Outcome     string `gorm:"type:varchar(255)" json:"outcome"`
+}
+
+type ViolationActionCreateResponse struct {
+	PKID          int64  `gorm:"primary_key;auto_increment" json:"pkid"`
+	ViolationPKID int64  `gorm:"not null" json:"violation_pkid"`
+	ActionTaken   string `gorm:"type:varchar(255)" json:"action_taken"`
+	TakenByPKID   int64  `gorm:"not null" json:"taken_by_pkid"`
+	Outcome       string `gorm:"type:varchar(255)" json:"outcome"`
+}
+
+type ViolationNoteCreateRequest struct {
+	Note     string `gorm:"type:text" json:"note"`
+	NoteType string `gorm:"type:varchar(255)" json:"note_type"`
+}
+type ViolationNoteCreateResponse struct {
+	PKID          int64  `gorm:"primary_key;auto_increment" json:"pkid"`
+	ViolationPKID int64  `gorm:"not null" json:"violation_pkid"`
+	Note          string `gorm:"type:text" json:"note"`
+	NoteType      string `gorm:"type:varchar(255)" json:"note_type"`
 }
 
 type ViolationUpdateRequest struct {
