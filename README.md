@@ -2,6 +2,8 @@
 
 Contribute to Caknoo [https://github.com/Caknoooo/go-gin-clean-starter](https://github.com/Caknoooo/go-gin-clean-starter)
 
+ERD Diagram : https://dbdiagram.io/d/Violation-Management-66f0e910a0828f8aa6b20b65
+
 
 ## Introduction 👋
 > Clean Architecture is an approach to organizing code in an application that focuses on separating responsibilities and dependencies between components. In the context of Golang, Clean Architecture refers to the application of Clean Architecture principles in developing applications using the Go programming language.
